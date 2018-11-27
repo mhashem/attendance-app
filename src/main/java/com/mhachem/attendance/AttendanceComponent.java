@@ -8,7 +8,6 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -85,8 +84,10 @@ public class AttendanceComponent {
 		
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
 			List<AttendanceDay> attendanceDays = parseStream(reader.lines());
+			
 			int result = 0;
 			int computedDays = 0;
+			
 			for (AttendanceDay attendanceDay : attendanceDays) {
 
 				if (useDefaultTimes) {
