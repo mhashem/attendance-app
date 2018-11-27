@@ -8,14 +8,17 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.google.common.collect.ImmutableSet;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mhachem.attendance.config.AttendanceConfig;
 import com.mhachem.attendance.model.AttendanceDay;
+import com.mhachem.attendance.model.AttendanceResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,7 +71,7 @@ public class AttendanceComponent {
 
 			logger.info("Status Code {}", httpResponse.getStatus());
 			if (httpResponse.getStatus() == 200) {
-				computeAttendance(httpResponse.getRawBody(), useDefaultTimes);
+				this.report(computeAttendance(httpResponse.getRawBody(), useDefaultTimes));
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -76,19 +79,14 @@ public class AttendanceComponent {
 
 	}
 
-	private void computeAttendance(InputStream inputStream, boolean useDefaultTimes) throws IOException {
+	protected AttendanceResult computeAttendance(InputStream inputStream, boolean useDefaultTimes) throws IOException {
+
+		AttendanceResult attendanceResult = new AttendanceResult();
 		
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-			List<AttendanceDay> attendanceDays = reader
-				.lines()
-				.map(line -> line.split("\t"))
-				.filter(strings -> WORKING_DAYS.contains(strings[0]))
-				.map(Utils::parseDay)
-				.collect(Collectors.toList());
-
+			List<AttendanceDay> attendanceDays = parseStream(reader.lines());
 			int result = 0;
 			int computedDays = 0;
-
 			for (AttendanceDay attendanceDay : attendanceDays) {
 
 				if (useDefaultTimes) {
@@ -102,8 +100,25 @@ public class AttendanceComponent {
 					computedDays++;
 				}
 			}
-			logger.info("Your current state (in minutes) for ({}) working days is: {}", computedDays, result);
-			logger.info("Expected working hours by end of the month: {}", attendanceDays.size() * 9);
+
+			attendanceResult.setTimeGap(result);
+			attendanceResult.setComputedDays(computedDays);
+			attendanceResult.getAttendanceDays().addAll(attendanceDays);
 		}
+
+		return attendanceResult;
+	}
+
+	private void report(AttendanceResult attendanceResult) {
+		logger.info("Your current state (in minutes) for ({}) working days is: {}", attendanceResult.getComputedDays(),
+			attendanceResult.getTimeGap());
+		logger.info("Expected working hours by end of the month: {}", attendanceResult.getAttendanceDays().size() * 9);
+	}
+
+	private List<AttendanceDay> parseStream(Stream<String> lines) {
+		return lines.map(line -> line.split("\t"))
+			.filter(strings -> WORKING_DAYS.contains(strings[0]))
+			.map(Utils::parseDay)
+			.collect(Collectors.toList());
 	}
 }
