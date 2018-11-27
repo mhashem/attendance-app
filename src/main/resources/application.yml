@@ -1,0 +1,3 @@
+attendance:
+ machine:
+  address: http://10.100.0.201/if.cgi
