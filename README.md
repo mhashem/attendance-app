@@ -2,7 +2,9 @@
 
 A very basic :beginner: command line utility :zap: to check attendance by month.
 
-Welcome fellows, you can use this command line utility to check your attendance per month, contributions are welcomed :smile:
+Welcome fellows, you can use this command line utility to check your attendance :ledger: per month :calendar:
+
+>Note: this is a work in progress, contributions are welcomed :smile:
 
 ### Usage:
 
