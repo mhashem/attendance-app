@@ -161,12 +161,12 @@
 			</snapshots>
 		</repository>
 	</repositories>
-	
+
 	<scm>
-		<connection>scm:git:ssh://git@github.com:mhashem/attendance-app.git</connection>
-		<developerConnection>scm:git:ssh://git@github.com:mhashem/attendance-app.git</developerConnection>
-		<url>https://github.com/mhashem/attendance-app.git</url>
-		<tag>v0.0.2</tag>
+		<connection>scm:git:https://github.com/mhashem/attendance-app.git</connection>
+		<developerConnection>scm:git:git@github.com:mhashem/attendance-app.git</developerConnection>
+		<url>https://github.com/mhashem/attendance-app</url>
+		<tag>HEAD</tag>
 	</scm>
 
 
