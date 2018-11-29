@@ -1,4 +1,4 @@
-package com.mhachem.attendance;
+package com.mhachem.attendance.utils;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -6,18 +6,18 @@ import java.time.format.DateTimeFormatter;
 
 import com.mhachem.attendance.model.AttendanceDay;
 
-class Utils {
+public final class Helper {
 
 	private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 
 	private static final String DEFAULT_TIME_VALUE = "--:--";
 	private static final String DEFAULT_DATE_VALUE = "----";
 
-	private Utils() {
+	private Helper() {
 		// constructor
 	}
 	
-	static AttendanceDay parseDay(String[] strings) {
+	public static AttendanceDay parseDay(String[] strings) {
 		AttendanceDay day = new AttendanceDay();
 		day.setDate(parseDate(strings[1]));
 		day.setIn(parseTime(strings[2]));

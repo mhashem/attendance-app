@@ -17,6 +17,7 @@ public class AttendanceComponentIT {
 
 	private AttendanceComponent attendanceComponent;
 
+/*
 	@Before
 	public void setup() {
 		attendanceComponent = new AttendanceComponent(new AttendanceConfig());
@@ -30,5 +31,6 @@ public class AttendanceComponentIT {
 			Assertions.assertThat(attendanceResult.getComputedDays()).isEqualTo(19);
 		}
 	}
+*/
 
 }

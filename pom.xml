@@ -9,7 +9,7 @@
 	<packaging>jar</packaging>
 
 	<name>attendance-app</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Attendance App for Sword Group Employees</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>

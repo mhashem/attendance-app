@@ -22,6 +22,7 @@ public class AttendanceConfig {
 	public static class Machine {
 		
 		private String address;
+		private String accessToken;
 
 		public String getAddress() {
 			return address;
@@ -29,6 +30,14 @@ public class AttendanceConfig {
 
 		public void setAddress(String address) {
 			this.address = address;
+		}
+
+		public String getAccessToken() {
+			return accessToken;
+		}
+
+		public void setAccessToken(String accessToken) {
+			this.accessToken = accessToken;
 		}
 	}
 	
