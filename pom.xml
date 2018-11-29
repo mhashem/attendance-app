@@ -4,7 +4,7 @@
 
 	<groupId>com.mhachem.attendance</groupId>
 	<artifactId>attendance-app</artifactId>
-	<version>0.0.3</version>
+	<version>0.0.4-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>attendance-app</name>
@@ -166,7 +166,7 @@
 		<connection>scm:git:https://github.com/mhashem/attendance-app.git</connection>
 		<developerConnection>scm:git:git@github.com:mhashem/attendance-app.git</developerConnection>
 		<url>https://github.com/mhashem/attendance-app</url>
-		<tag>v0.0.3</tag>
+		<tag>HEAD</tag>
 	</scm>
 
 
