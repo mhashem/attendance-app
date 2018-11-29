@@ -1,12 +1,10 @@
 package com.mhachem.attendance.service;
 
-import java.util.List;
-
-import com.mhachem.attendance.model.AttendanceDay;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mhachem.attendance.model.AttendanceResult;
 
 public interface IAttendanceService {
 
-	AttendanceResult computeAttendance(int employeeId, int month, boolean useDefaults);
+	AttendanceResult computeAttendance(int employeeId, int month, boolean useDefaults) throws UnirestException;
 	
 }

@@ -1,4 +1,4 @@
-package com.mhachem.attendance;
+package com.mhachem.attendance.shell;
 
 import com.mhachem.attendance.model.AttendanceResult;
 import com.mhachem.attendance.service.impl.AttendanceService;
@@ -30,7 +30,7 @@ public class AttendanceComponent {
 			this.report(
 				attendanceService.computeAttendance(Integer.parseInt(uid), Integer.parseInt(month), useDefaultTimes));
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error(e.getMessage(), e);
 		}
 
 	}

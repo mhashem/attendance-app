@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.time.Duration;
 import java.util.List;
 
+import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mhachem.attendance.client.IAttendanceMachineClient;
 import com.mhachem.attendance.model.AttendanceDay;
 import com.mhachem.attendance.model.AttendanceResult;
@@ -23,7 +24,7 @@ public class AttendanceService implements IAttendanceService {
 	}
 
 	@Override
-	public AttendanceResult computeAttendance(int employeeId, int month, boolean useDefaults) {
+	public AttendanceResult computeAttendance(int employeeId, int month, boolean useDefaults) throws UnirestException {
 		return this.computeAttendance(this.attendanceMachineClient.parseAttendanceDays(employeeId, month), useDefaults);
 	}
 

@@ -37,12 +37,11 @@ public class AttendanceMachineClient implements IAttendanceMachineClient {
 	}
 
 	@Override
-	public List<AttendanceDay> parseAttendanceDays(int employeeId, int month) {
+	public List<AttendanceDay> parseAttendanceDays(int employeeId, int month) throws UnirestException {
 
 		LocalDate seedDate = LocalDate.now().withMonth(month);
 
 		HttpResponse<InputStream> httpResponse = null;
-		try {
 			httpResponse = Unirest.get(attendanceConfig.getMachine().getAddress())
 				.queryString("redirect", "report.htm")
 				.queryString("failure", "fail.htm")
@@ -67,11 +66,8 @@ public class AttendanceMachineClient implements IAttendanceMachineClient {
 			}
 			else {
 				logger.warn("Failed to get file for employee id {} - month {}", employeeId, month);
+				return ImmutableList.of();
 			}
-		} catch (UnirestException e) {
-			logger.error(e.getMessage(), e);
-		}
-		return ImmutableList.of();
 	}
 	
 	private List<AttendanceDay> parseStream(InputStream inputStream) {
