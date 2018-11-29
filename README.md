@@ -1,4 +1,4 @@
-## attendance-app 
+## Attendance CLI
 
 A very basic :beginner: command line utility :zap: to check attendance by month.
 
