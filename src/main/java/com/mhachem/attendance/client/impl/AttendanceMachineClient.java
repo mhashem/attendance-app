@@ -37,7 +37,7 @@ public class AttendanceMachineClient implements IAttendanceMachineClient {
 	}
 
 	@Override
-	public List<AttendanceDay> parseAttendanceDays(int employeeId, int month) throws UnirestException {
+	public List<AttendanceDay> parseAttendanceDays(int employeeId, int month) throws UnirestException, IOException {
 
 		LocalDate seedDate = LocalDate.now().withMonth(month);
 
@@ -70,16 +70,13 @@ public class AttendanceMachineClient implements IAttendanceMachineClient {
 			}
 	}
 	
-	private List<AttendanceDay> parseStream(InputStream inputStream) {
+	private List<AttendanceDay> parseStream(InputStream inputStream) throws IOException {
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
 			return reader.lines().map(line -> line.split("\t"))
 				.filter(strings -> Constants.WORKING_DAYS.contains(strings[0]))
 				.map(Helper::parseDay)
 				.collect(Collectors.toList());
 
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-			return ImmutableList.of();
 		}
 	}
 	
