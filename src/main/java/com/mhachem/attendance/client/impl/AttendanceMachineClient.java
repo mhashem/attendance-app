@@ -35,39 +35,44 @@ public class AttendanceMachineClient implements IAttendanceMachineClient {
 	public AttendanceMachineClient(AttendanceConfig attendanceConfig) {
 		this.attendanceConfig = attendanceConfig;
 	}
-
+	
 	@Override
 	public List<AttendanceDay> parseAttendanceDays(int employeeId, int month) throws UnirestException, IOException {
+		return this.parseAttendanceDays(employeeId, month, LocalDate.now().getYear());
+	}
 
-		LocalDate seedDate = LocalDate.now().withMonth(month);
+	@Override
+	public List<AttendanceDay> parseAttendanceDays(int employeeId, int month, int year) throws UnirestException, IOException {
+		
+		LocalDate seedDate = LocalDate.now().withMonth(month).withYear(year);
 
 		HttpResponse<InputStream> httpResponse = null;
-			httpResponse = Unirest.get(attendanceConfig.getMachine().getAddress())
-				.queryString("redirect", "report.htm")
-				.queryString("failure", "fail.htm")
-				.queryString("type", "attend_report")
-				.queryString("sel_all", "2")
-				.queryString("UID", employeeId)
-				.queryString("start_month", seedDate.getMonthValue())
-				.queryString("start_date", "1")
-				.queryString("start_year", seedDate.format(DateTimeFormatter.ofPattern("yy")))
-				.queryString("end_month", seedDate.getMonthValue())
-				.queryString("end_date", seedDate.lengthOfMonth())
-				.queryString("end_year", seedDate.format(DateTimeFormatter.ofPattern("yy")))
-				.queryString("Export", "EXPORT")
-				.header("Authorization", "Basic " + attendanceConfig.getMachine().getAccessToken())
-				.header("Connection", "keep-alive")
-				.header("Content-Type", "application/vnd.ms-excel")
-				.asBinary();
+		httpResponse = Unirest.get(attendanceConfig.getMachine().getAddress())
+			.queryString("redirect", "report.htm")
+			.queryString("failure", "fail.htm")
+			.queryString("type", "attend_report")
+			.queryString("sel_all", "2")
+			.queryString("UID", employeeId)
+			.queryString("start_month", seedDate.getMonthValue())
+			.queryString("start_date", "1")
+			.queryString("start_year", seedDate.format(DateTimeFormatter.ofPattern("yy")))
+			.queryString("end_month", seedDate.getMonthValue())
+			.queryString("end_date", seedDate.lengthOfMonth())
+			.queryString("end_year", seedDate.format(DateTimeFormatter.ofPattern("yy")))
+			.queryString("Export", "EXPORT")
+			.header("Authorization", "Basic " + attendanceConfig.getMachine().getAccessToken())
+			.header("Connection", "keep-alive")
+			.header("Content-Type", "application/vnd.ms-excel")
+			.asBinary();
 
-			logger.info("Status Code {}", httpResponse.getStatus());
-			if (httpResponse.getStatus() == 200) {
-				return parseStream(httpResponse.getRawBody());
-			}
-			else {
-				logger.warn("Failed to get file for employee id {} - month {}", employeeId, month);
-				return ImmutableList.of();
-			}
+		logger.info("Status Code {}", httpResponse.getStatus());
+		if (httpResponse.getStatus() == 200) {
+			return parseStream(httpResponse.getRawBody());
+		}
+		else {
+			logger.warn("Failed to get file for employee id {} - month {}", employeeId, month);
+			return ImmutableList.of();
+		}
 	}
 	
 	private List<AttendanceDay> parseStream(InputStream inputStream) throws IOException {

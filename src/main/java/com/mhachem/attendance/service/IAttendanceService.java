@@ -9,5 +9,7 @@ public interface IAttendanceService {
 
 	AttendanceResult computeAttendance(int employeeId, int month, boolean useDefaults)
 		throws UnirestException, IOException;
-	
+
+	AttendanceResult computeAttendance(int employeeId, int month, int year, boolean useDefaults)
+		throws UnirestException, IOException;
 }

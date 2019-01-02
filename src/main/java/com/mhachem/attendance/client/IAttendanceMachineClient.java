@@ -11,5 +11,6 @@ public interface IAttendanceMachineClient {
 	// todo move call to attendance machine here
 	
 	List<AttendanceDay> parseAttendanceDays(int employeeId, int month) throws UnirestException, IOException;
-	
+
+	List<AttendanceDay> parseAttendanceDays(int employeeId, int month, int year) throws UnirestException, IOException;
 }

@@ -29,6 +29,13 @@ public class AttendanceService implements IAttendanceService {
 		return this.computeAttendance(this.attendanceMachineClient.parseAttendanceDays(employeeId, month), useDefaults);
 	}
 
+	@Override
+	public AttendanceResult computeAttendance(int employeeId, int month, int year, boolean useDefaults)
+		throws UnirestException, IOException {
+		return this
+			.computeAttendance(this.attendanceMachineClient.parseAttendanceDays(employeeId, month, year), useDefaults);
+	}
+
 	protected AttendanceResult computeAttendance(List<AttendanceDay> attendanceDays, boolean useDefaultTimes) {
 
 		AttendanceResult attendanceResult = new AttendanceResult();
