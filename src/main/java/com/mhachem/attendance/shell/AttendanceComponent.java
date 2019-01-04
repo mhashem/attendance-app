@@ -15,8 +15,11 @@ import org.springframework.util.StringUtils;
 @ShellComponent
 public class AttendanceComponent {
 
+	private static final String LINE = "-------------------------------------------------" 
+		+ "------------------------------------------";
+	
 	private Logger logger = LoggerFactory.getLogger(AttendanceComponent.class);
-
+	
 	private final AttendanceService attendanceService;
 
 	@Autowired
@@ -30,7 +33,7 @@ public class AttendanceComponent {
 			String uid) {
 		LocalDate now = LocalDate.now();
 		try {
-			this.report(
+			this.writeToShellStream(
 				attendanceService.computeAttendance(Integer.parseInt(uid), now.getMonthValue(), now.getYear(), true));
 
 		} catch (Exception e) {
@@ -52,10 +55,10 @@ public class AttendanceComponent {
 			boolean useDefaultTimes = defaultTimes.equalsIgnoreCase("d");
 
 			if (StringUtils.isEmpty(year)) {
-				this.report(attendanceService
+				this.writeToShellStream(attendanceService
 					.computeAttendance(Integer.parseInt(uid), Integer.parseInt(month), useDefaultTimes));
 			} else {
-				this.report(attendanceService
+				this.writeToShellStream(attendanceService
 					.computeAttendance(Integer.parseInt(uid), Integer.parseInt(month), Integer.parseInt(year),
 						useDefaultTimes));
 			}
@@ -65,9 +68,9 @@ public class AttendanceComponent {
 		}
 
 	}
-
-	private void report(AttendanceResult attendanceResult) {
-		logger.warn("-------------------------------------------------------------------------------------------");
+	
+	private void writeToShellStream(AttendanceResult attendanceResult) {
+		logger.warn(LINE);
 		if (attendanceResult.getTimeGap() < 0) {
 			logger.info("Your current state (in minutes) for ({}) working days is: {} \uD83D\uDE13",
 				attendanceResult.getComputedDays(), attendanceResult.getTimeGap());
@@ -76,9 +79,10 @@ public class AttendanceComponent {
 				attendanceResult.getComputedDays(), attendanceResult.getTimeGap());
 		}
 		logger.info("Expected working hours by end of the month: {}", attendanceResult.getAttendanceDays().size() * 9);
-		logger.warn("-------------------------------------------------------------------------------------------");
+		logger.warn(LINE);
 		logger.warn("\u001B[1mAfter 10 attempts the free License will expire and you will have to pay for using this app");
-		logger.warn("-------------------------------------------------------------------------------------------");
+		logger.warn(LINE);
 	}
+	
 
 }
