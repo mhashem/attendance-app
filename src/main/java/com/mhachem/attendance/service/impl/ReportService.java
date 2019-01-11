@@ -14,6 +14,7 @@ import com.mhachem.attendance.model.EmployeeAttendance;
 import com.mhachem.attendance.model.context.AttendanceQueryContext;
 import com.mhachem.attendance.service.IEmployeeService;
 import com.mhachem.attendance.service.IReportService;
+import com.mhachem.attendance.utils.IOUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,19 +39,26 @@ public class ReportService implements IReportService {
 	}
 
 	@Override
-	public List<EmployeeAttendance> report(int[] ids, AttendanceQueryContext ctx) {
+	public List<EmployeeAttendance> report(AttendanceQueryContext ctx,
+		IOUtils.ProgressListener progressListener) {
+		
 		List<EmployeeAttendance> employeeAttendances = Lists.newArrayList();
-		for (int id : ids) {
+		
+		ctx.getIds().forEach( id -> {
 			try {
 				// todo use the data provider to get Employee name
 				Employee employee = findEmployee(id);
 				AttendanceResult attendanceResult =
 					attendanceService.computeAttendance(id, ctx.getMonth(), ctx.getYear(), ctx.isUseDefaults());
 				employeeAttendances.add(EmployeeAttendance.make(employee, attendanceResult));
+
+				// todo use RxJava instead
+				progressListener.onProgress(1);
+
 			} catch (UnirestException | IOException e) {
 				logger.error(e.getMessage(), e);
 			}
-		}
+		});
 		return employeeAttendances;
 	}
 	

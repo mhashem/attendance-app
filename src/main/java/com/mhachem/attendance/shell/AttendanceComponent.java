@@ -1,9 +1,15 @@
 package com.mhachem.attendance.shell;
 
 import java.time.LocalDate;
+import java.util.List;
 
+import com.google.common.collect.Lists;
 import com.mhachem.attendance.model.AttendanceResult;
+import com.mhachem.attendance.model.EmployeeAttendance;
+import com.mhachem.attendance.model.context.AttendanceQueryContext;
+import com.mhachem.attendance.service.IReportService;
 import com.mhachem.attendance.service.impl.AttendanceService;
+import me.tongfei.progressbar.ProgressBar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +25,15 @@ public class AttendanceComponent {
 		+ "------------------------------------------";
 	
 	private Logger logger = LoggerFactory.getLogger(AttendanceComponent.class);
+
+	private final IReportService reportService;
 	
 	private final AttendanceService attendanceService;
 
 	@Autowired
-	public AttendanceComponent(AttendanceService attendanceService) {
+	public AttendanceComponent(AttendanceService attendanceService, IReportService reportService) {
 		this.attendanceService = attendanceService;
+		this.reportService = reportService;
 	}
 
 	@ShellMethod("Compute attendance time - result in minutes")
@@ -65,6 +74,26 @@ public class AttendanceComponent {
 			
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
+		}
+
+	}
+
+	@ShellMethod("Compute multiple employees attendance")
+	public void report() {
+
+		AttendanceQueryContext ctx = new AttendanceQueryContext();
+		ctx.getIds().addAll(Lists.newArrayList(57, 88));
+
+		int completed = 0;
+
+		try (ProgressBar progressBar = new ProgressBar("Employees Attendance Computation", ctx.getIds().size())) {
+			List<EmployeeAttendance> reportResult = reportService.report(ctx, value -> {
+				// todo print progress
+				// progressBar.stepTo()
+			});
+			reportResult.forEach(employeeAttendance -> {
+				// todo add method to print attendance and employee to a line by line style
+			});
 		}
 
 	}

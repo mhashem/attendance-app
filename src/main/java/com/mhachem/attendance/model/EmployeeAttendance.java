@@ -28,10 +28,6 @@ public class EmployeeAttendance {
 		return attendanceResult;
 	}
 
-	public void setAttendanceResult(AttendanceResult attendanceResult) {
-		this.attendanceResult = attendanceResult;
-	}
-
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;

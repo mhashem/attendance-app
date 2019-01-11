@@ -12,8 +12,8 @@ public class AttendanceQueryContext {
 	private int year;
 	private boolean useDefaults;
 	
-	public void setIds(List<Integer> ids) {
-		this.ids.addAll(ids);
+	public List<Integer> getIds() {
+		return ids;
 	}
 
 	public int getMonth() {
