@@ -64,9 +64,9 @@ public class AttendanceMachineClient implements IAttendanceMachineClient {
 			.header("Connection", "keep-alive")
 			.header("Content-Type", "application/vnd.ms-excel")
 			.asBinary();
-
-		logger.info("Status Code {}", httpResponse.getStatus());
+		
 		if (httpResponse.getStatus() == 200) {
+			logger.info("Attendance machine was contacted successfully");
 			return parseStream(httpResponse.getRawBody());
 		}
 		else {

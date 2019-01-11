@@ -13,9 +13,10 @@ public class EmployeeAttendance {
 		// empty
 	}
 	
-	public static EmployeeAttendance make(Employee employee) {
+	public static EmployeeAttendance make(Employee employee, AttendanceResult attendanceResult) {
 		EmployeeAttendance employeeAttendance = new EmployeeAttendance();
 		employeeAttendance.employee = employee;
+		employeeAttendance.attendanceResult = attendanceResult;
 		return employeeAttendance;
 	}
 

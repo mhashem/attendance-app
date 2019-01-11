@@ -7,6 +7,7 @@ import com.google.common.collect.Lists;
 public class AttendanceQueryContext {
 	
 	private List<Integer> ids = Lists.newArrayList();
+	
 	private int month;
 	private int year;
 	private boolean useDefaults;

@@ -4,25 +4,37 @@ import java.util.Objects;
 
 public class Employee {
 
+	private static final String UNKNOWN = "unknown";
+	
 	private int id;
 	private String name;
 
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
+	private Employee(int id) {
 		this.id = id;
+		this.name = UNKNOWN;
 	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
+	
+	private Employee(int id, String name) {
+		this.id = id;
 		this.name = name;
 	}
 
+	public static Employee from(int id) {
+		return new Employee(id);
+	}
+	
+	public static Employee from(int id, String name) {
+		return new Employee(id, name);
+	}
+	
+	public int getId() {
+		return id;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
