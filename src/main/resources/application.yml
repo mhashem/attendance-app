@@ -1,4 +1,4 @@
 attendance:
  machine:
-  address: http://10.100.0.201/if.cgi
+  address: ${attendance-machine-address:http://10.100.0.201/if.cgi}
   access-token: ${attendance-machine-accessToken}

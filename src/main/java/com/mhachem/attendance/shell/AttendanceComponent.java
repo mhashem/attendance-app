@@ -4,11 +4,13 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.google.common.collect.Lists;
+
 import com.mhachem.attendance.model.AttendanceResult;
 import com.mhachem.attendance.model.EmployeeAttendance;
 import com.mhachem.attendance.model.context.AttendanceQueryContext;
 import com.mhachem.attendance.service.IReportService;
 import com.mhachem.attendance.service.impl.AttendanceService;
+
 import me.tongfei.progressbar.ProgressBar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +25,10 @@ public class AttendanceComponent {
 
 	private static final String LINE = "-------------------------------------------------" 
 		+ "------------------------------------------";
-	
+
+	private static final String SAD_FACE = "\uD83D\uDE13";
+	private static final String SMILE_FACE = "\uD83D\uDE01";
+
 	private Logger logger = LoggerFactory.getLogger(AttendanceComponent.class);
 
 	private final IReportService reportService;
@@ -101,17 +106,17 @@ public class AttendanceComponent {
 	private void writeToShellStream(AttendanceResult attendanceResult) {
 		logger.warn(LINE);
 		if (attendanceResult.getTimeGap() < 0) {
-			logger.info("Your current state (in minutes) for ({}) working days is: {} \uD83D\uDE13",
-				attendanceResult.getComputedDays(), attendanceResult.getTimeGap());
+			logger.info("Your current state (in minutes) for ({}) working days is: {} {}",
+				attendanceResult.getComputedDays(), attendanceResult.getTimeGap(), SAD_FACE);
 		} else {
-			logger.info("Your current state (in minutes) for ({}) working days is: {} \uD83D\uDE01",
-				attendanceResult.getComputedDays(), attendanceResult.getTimeGap());
+			logger.info("Your current state (in minutes) for ({}) working days is: {} {}",
+				attendanceResult.getComputedDays(), attendanceResult.getTimeGap(), SMILE_FACE);
 		}
 		logger.info("Expected working hours by end of the month: {}", attendanceResult.getAttendanceDays().size() * 9);
 		logger.warn(LINE);
 		logger.warn("\u001B[1mAfter 10 attempts the free License will expire and you will have to pay for using this app");
 		logger.warn(LINE);
 	}
-	
+
 
 }

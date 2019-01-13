@@ -1,5 +1,6 @@
 package com.mhachem.attendance.model;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -28,8 +29,12 @@ public class AttendanceResult {
 		this.computedDays = computedDays;
 	}
 
+	public void setAttendanceDays(List<AttendanceDay> attendanceDays) {
+		this.attendanceDays.addAll(attendanceDays);
+	}
+
 	public List<AttendanceDay> getAttendanceDays() {
-		return attendanceDays;
+		return Collections.unmodifiableList(attendanceDays);
 	}
 
 	@Override
@@ -41,8 +46,9 @@ public class AttendanceResult {
 			return false;
 		
 		AttendanceResult that = (AttendanceResult) o;
-		return Objects.equals(getTimeGap(), that.getTimeGap()) && Objects.equals(getComputedDays(), that.getComputedDays())
-			&& getAttendanceDays().containsAll(that.getAttendanceDays());
+		return Objects.equals(getTimeGap(), that.getTimeGap())
+			&& Objects.equals(getComputedDays(), that.getComputedDays())
+			&& this.attendanceDays.containsAll(that.attendanceDays);
 	}
 
 	@Override

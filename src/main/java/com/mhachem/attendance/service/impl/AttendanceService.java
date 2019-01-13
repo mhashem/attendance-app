@@ -59,7 +59,7 @@ public class AttendanceService implements IAttendanceService {
 
 		attendanceResult.setTimeGap(result);
 		attendanceResult.setComputedDays(computedDays);
-		attendanceResult.getAttendanceDays().addAll(attendanceDays);
+		attendanceResult.setAttendanceDays(attendanceDays);
 
 		return attendanceResult;
 	}
