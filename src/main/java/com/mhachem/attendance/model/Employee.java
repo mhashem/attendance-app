@@ -2,6 +2,10 @@ package com.mhachem.attendance.model;
 
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.base.MoreObjects;
+
 public class Employee {
 
 	private static final String UNKNOWN = "unknown";
@@ -23,7 +27,8 @@ public class Employee {
 		return new Employee(id);
 	}
 	
-	public static Employee from(int id, String name) {
+	@JsonCreator
+	public static Employee from(@JsonProperty("id") int id, @JsonProperty("name") String name) {
 		return new Employee(id, name);
 	}
 	
@@ -46,6 +51,14 @@ public class Employee {
 	@Override
 	public int hashCode() {
 		return Objects.hash(getId(), getName());
+	}
+
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(Employee.class)
+			.add("id", id)
+			.add("name", name)
+			.toString();
 	}
 	
 }
