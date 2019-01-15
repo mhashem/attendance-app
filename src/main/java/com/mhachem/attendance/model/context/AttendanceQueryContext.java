@@ -1,42 +1,39 @@
 package com.mhachem.attendance.model.context;
 
+import java.util.Collections;
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
 public class AttendanceQueryContext {
-	
-	private List<Integer> ids = Lists.newArrayList();
+
+	private List<Integer> ids;
 	
 	private int month;
 	private int year;
 	private boolean useDefaults;
-	
+
+	public AttendanceQueryContext(List<Integer> ids, int month, int year, boolean useDefaults) {
+		this.ids = ids;
+		this.month = month;
+		this.year = year;
+		this.useDefaults = useDefaults;
+	}
+
 	public List<Integer> getIds() {
-		return ids;
+		return Collections.unmodifiableList(ids);
 	}
 
 	public int getMonth() {
 		return month;
 	}
 
-	public void setMonth(int month) {
-		this.month = month;
-	}
 
 	public int getYear() {
 		return year;
 	}
 
-	public void setYear(int year) {
-		this.year = year;
-	}
 	
 	public boolean isUseDefaults() {
 		return useDefaults;
 	}
 
-	public void setUseDefaults(boolean useDefaults) {
-		this.useDefaults = useDefaults;
-	}
 }

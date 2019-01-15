@@ -4,6 +4,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
@@ -17,6 +18,7 @@ import com.mhachem.attendance.service.IReportService;
 import com.mhachem.attendance.utils.Utils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -39,25 +41,27 @@ public class ReportService implements IReportService {
 	}
 
 	@Override
-	public List<EmployeeAttendance> report(AttendanceQueryContext ctx,
-		Utils.ProgressListener progressListener) {
+	public List<EmployeeAttendance> report(AttendanceQueryContext ctx, Utils.ProgressListener progressListener,
+		@Nullable Utils.ErrorListener errorListener) {
 		
 		List<EmployeeAttendance> employeeAttendances = Lists.newArrayList();
+
+		int completed = 0;
 		
-		ctx.getIds().forEach( id -> {
+		for (Integer id : ctx.getIds()) {
 			try {
 				AttendanceResult attendanceResult =
 					attendanceService.computeAttendance(id, ctx.getMonth(), ctx.getYear(), ctx.isUseDefaults());
-
 				employeeAttendances.add(EmployeeAttendance.make(findEmployee(id), attendanceResult));
-
 				// todo use RxJava instead
-				progressListener.onProgress(1);
-
+				progressListener.onProgress(++completed);
 			} catch (UnirestException | IOException e) {
 				logger.error(e.getMessage(), e);
+
+				Optional.ofNullable(errorListener)
+					.ifPresent(listener -> listener.onError("Failed to complete generating attendance report", e));
 			}
-		});
+		}
 		return employeeAttendances;
 	}
 	

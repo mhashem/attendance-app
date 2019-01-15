@@ -4,13 +4,11 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.google.common.collect.Lists;
-
 import com.mhachem.attendance.model.AttendanceResult;
 import com.mhachem.attendance.model.EmployeeAttendance;
 import com.mhachem.attendance.model.context.AttendanceQueryContext;
 import com.mhachem.attendance.service.IReportService;
 import com.mhachem.attendance.service.impl.AttendanceService;
-
 import me.tongfei.progressbar.ProgressBar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +24,8 @@ public class AttendanceComponent {
 	private static final String LINE = "-------------------------------------------------" 
 		+ "------------------------------------------";
 
+	private static final String SMALL_LINE = "----------------------------------";
+	
 	private static final String SAD_FACE = "\uD83D\uDE13";
 	private static final String SMILE_FACE = "\uD83D\uDE01";
 
@@ -86,21 +86,27 @@ public class AttendanceComponent {
 	@ShellMethod("Compute multiple employees attendance")
 	public void report() {
 
-		AttendanceQueryContext ctx = new AttendanceQueryContext();
-		ctx.getIds().addAll(Lists.newArrayList(57, 88));
-
-		int completed = 0;
+		AttendanceQueryContext ctx =
+			new AttendanceQueryContext(Lists.newArrayList(57, 11, 27, 86), LocalDate.now().getMonthValue(),
+				LocalDate.now().getYear(), true);
 
 		try (ProgressBar progressBar = new ProgressBar("Employees Attendance Computation", ctx.getIds().size())) {
-			List<EmployeeAttendance> reportResult = reportService.report(ctx, value -> {
-				// todo print progress
-				// progressBar.stepTo()
-			});
-			reportResult.forEach(employeeAttendance -> {
-				// todo add method to print attendance and employee to a line by line style
-			});
-		}
+			List<EmployeeAttendance> reportResult =
+				reportService.report(ctx, progressBar::stepTo, (message, throwable) -> {
+				});
 
+			logger.info(SMALL_LINE);
+			logger.info("ID\tName\t\t\tDays\tState");
+
+			reportResult.stream().sorted().forEach(employeeAttendance -> {
+				logger.info(SMALL_LINE);
+				logger.info("{}\t{}\t{}\t\t{}", employeeAttendance.getEmployee().getId(),
+					employeeAttendance.getEmployee().getName(),
+					employeeAttendance.getAttendanceResult().getComputedDays(),
+					String.format("%.2f", ((float)employeeAttendance.getAttendanceResult().getTimeGap() / 60)));
+			});
+			logger.info(SMALL_LINE);
+		}
 	}
 	
 	private void writeToShellStream(AttendanceResult attendanceResult) {

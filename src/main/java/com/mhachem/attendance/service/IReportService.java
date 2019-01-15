@@ -10,6 +10,7 @@ import com.mhachem.attendance.utils.Utils;
 public interface IReportService {
 	
 	List<AttendanceResult> report();
-
-	List<EmployeeAttendance> report(AttendanceQueryContext ctx, Utils.ProgressListener progressListener);
+	
+	List<EmployeeAttendance> report(AttendanceQueryContext ctx, Utils.ProgressListener progressListener,
+		Utils.ErrorListener errorListener);
 }

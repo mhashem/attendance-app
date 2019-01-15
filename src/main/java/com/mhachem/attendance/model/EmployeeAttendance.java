@@ -3,8 +3,9 @@ package com.mhachem.attendance.model;
 import java.util.Objects;
 
 import com.google.common.base.MoreObjects;
+import org.springframework.util.comparator.Comparators;
 
-public class EmployeeAttendance {
+public class EmployeeAttendance implements Comparable<EmployeeAttendance> {
 	
 	private Employee employee;
 	private AttendanceResult attendanceResult;
@@ -48,5 +49,10 @@ public class EmployeeAttendance {
 			.add("employee", getEmployee())
 			.add("attendanceResult", getAttendanceResult())
 			.toString();
+	}
+
+	@Override
+	public int compareTo(EmployeeAttendance o) {
+		return Comparators.comparable().compare(this.getEmployee().getId(), o.getEmployee().getId());
 	}
 }

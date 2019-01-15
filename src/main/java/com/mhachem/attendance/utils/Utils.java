@@ -7,4 +7,8 @@ public class Utils {
 		void onProgress(long value);
 	}
 	
+	public interface ErrorListener {
+		void onError(String message, Throwable throwable);
+	}
+	
 }
