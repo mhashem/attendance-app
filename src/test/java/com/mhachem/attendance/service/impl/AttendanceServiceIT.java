@@ -10,12 +10,13 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import com.google.common.collect.ImmutableList;
-import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mhachem.attendance.client.IAttendanceMachineClient;
 import com.mhachem.attendance.model.AttendanceDay;
 import com.mhachem.attendance.model.AttendanceResult;
 import com.mhachem.attendance.service.IAttendanceService;
+
+import com.google.common.collect.ImmutableList;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;

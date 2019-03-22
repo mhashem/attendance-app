@@ -8,7 +8,7 @@ import com.google.common.base.MoreObjects;
 
 public class Employee {
 
-	private static final String UNKNOWN = "unknown";
+	private static final String UNKNOWN = "Unknown";
 	
 	private int id;
 	private String name;

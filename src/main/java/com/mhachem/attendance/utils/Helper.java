@@ -12,6 +12,9 @@ public final class Helper {
 
 	private static final String DEFAULT_TIME_VALUE = "--:--";
 	private static final String DEFAULT_DATE_VALUE = "----";
+	
+	private static final String TIME_REGEX = "\\d{2}:\\d{2}";
+
 
 	private Helper() {
 		// constructor
@@ -33,8 +36,7 @@ public final class Helper {
 	}
 
 	private static LocalTime parseTime(String timeStr) {
-		return timeStr.equalsIgnoreCase(DEFAULT_TIME_VALUE) || timeStr.equalsIgnoreCase(DEFAULT_DATE_VALUE) ?
-			null : LocalTime.parse(timeStr);
+		return timeStr.matches(TIME_REGEX) ? LocalTime.parse(timeStr) : null;
 	}
 
 

@@ -28,14 +28,14 @@ import org.springframework.stereotype.Component;
 public class AttendanceMachineClient implements IAttendanceMachineClient {
 
 	private static final Logger logger = getLogger(AttendanceMachineClient.class);
-	
+
 	private AttendanceConfig attendanceConfig;
 
 	@Autowired
 	public AttendanceMachineClient(AttendanceConfig attendanceConfig) {
 		this.attendanceConfig = attendanceConfig;
 	}
-	
+
 	@Override
 	public List<AttendanceDay> parseAttendanceDays(int employeeId, int month) throws UnirestException, IOException {
 		return this.parseAttendanceDays(employeeId, month, LocalDate.now().getYear());
@@ -43,7 +43,7 @@ public class AttendanceMachineClient implements IAttendanceMachineClient {
 
 	@Override
 	public List<AttendanceDay> parseAttendanceDays(int employeeId, int month, int year) throws UnirestException, IOException {
-		
+
 		LocalDate seedDate = LocalDate.now().withMonth(month).withYear(year);
 
 		HttpResponse<InputStream> httpResponse = null;
@@ -64,7 +64,7 @@ public class AttendanceMachineClient implements IAttendanceMachineClient {
 			.header("Connection", "keep-alive")
 			.header("Content-Type", "application/vnd.ms-excel")
 			.asBinary();
-		
+
 		if (httpResponse.getStatus() == 200) {
 			logger.info("Attendance machine was contacted successfully");
 			return parseStream(httpResponse.getRawBody());
@@ -74,7 +74,7 @@ public class AttendanceMachineClient implements IAttendanceMachineClient {
 			return ImmutableList.of();
 		}
 	}
-	
+
 	private List<AttendanceDay> parseStream(InputStream inputStream) throws IOException {
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
 			return reader.lines().map(line -> line.split("\t"))
@@ -84,5 +84,5 @@ public class AttendanceMachineClient implements IAttendanceMachineClient {
 
 		}
 	}
-	
+
 }
