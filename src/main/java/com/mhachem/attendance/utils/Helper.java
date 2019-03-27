@@ -1,8 +1,10 @@
 package com.mhachem.attendance.utils;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.concurrent.TimeUnit;
 
 import com.mhachem.attendance.model.AttendanceDay;
 
@@ -25,9 +27,26 @@ public final class Helper {
 		day.setDate(parseDate(strings[1]));
 		day.setIn(parseTime(strings[2]));
 		day.setOut(parseTime(strings[3]));
+
+		if (strings[4].equals("Working Time Setup Error")) {
+			// calculate it instead..  
+			long millis = Duration.between(day.getIn(), day.getOut()).toMillis();
+
+			String hms = String.format("%02d:%02d", TimeUnit.MILLISECONDS.toHours(millis),
+					TimeUnit.MILLISECONDS.toMinutes(millis)
+							- TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)));
+			day.setLateIn(parseTime(hms));
+		} else {
 		day.setLateIn(parseTime(strings[4]));
+		}
+
+		if (strings.length > 5) {
 		day.setEarly(parseTime(strings[5]));
+		}
+		if (strings.length > 6) {
 		day.setOvertime(parseTime(strings[6]));
+		}
+
 		return day;
 	}
 

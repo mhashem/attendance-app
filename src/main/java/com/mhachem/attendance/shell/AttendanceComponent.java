@@ -26,8 +26,8 @@ public class AttendanceComponent {
 
 	private static final String SMALL_LINE = "----------------------------------";
 	
-	private static final String SAD_FACE = "\uD83D\uDE13";
-	private static final String SMILE_FACE = "\uD83D\uDE01";
+	private static final String SAD_FACE = ":(";
+	private static final String SMILE_FACE = ":)";
 
 	private Logger logger = LoggerFactory.getLogger(AttendanceComponent.class);
 
@@ -112,10 +112,11 @@ public class AttendanceComponent {
 	private void writeToShellStream(AttendanceResult attendanceResult) {
 		logger.warn(LINE);
 		if (attendanceResult.getTimeGap() < 0) {
-			logger.info("Your current state (in minutes) for ({}) working days is: {} {}",
-				attendanceResult.getComputedDays(), attendanceResult.getTimeGap(), SAD_FACE);
+			logger.info("You are behind for ({}) working days by {} minutes {}",
+				attendanceResult.getComputedDays(), attendanceResult.getTimeGap() * -1, SAD_FACE);
+                
 		} else {
-			logger.info("Your current state (in minutes) for ({}) working days is: {} {}",
+			logger.info("Your are ahead for ({}) working days by {} minutes {}",	
 				attendanceResult.getComputedDays(), attendanceResult.getTimeGap(), SMILE_FACE);
 		}
 		logger.info("Expected working hours by end of the month: {}", attendanceResult.getAttendanceDays().size() * 9);
