@@ -10,11 +10,6 @@ jdk:
 script:
 	- mvn clean verify install;
 
-before_install:
-	- chmod +x .travis/main.sh
-	- chmod +x mvnw
-	- ./.travis/main.sh
-
 notifications:
 	email:
 		on_success: always # default: change
