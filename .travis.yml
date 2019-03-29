@@ -1,14 +1,7 @@
-sudo: required
-
-env:
-	- MAVEN_VERSION=3.3.9
-
 language: java
-jdk:
-	- oraclejdk8
+sudo: false # faster builds
 
-script:
-	- mvn clean verify install;
+script: "mvn clean install"
 
 notifications:
 	email:
