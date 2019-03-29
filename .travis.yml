@@ -1,0 +1,25 @@
+sudo: required
+
+env:
+	- MAVEN_VERSION=3.3.9
+
+services:
+	- docker
+
+language: java
+dist: trusty
+jdk:
+	- oraclejdk8
+
+script:
+	- mvn clean verify install;
+
+before_install:
+	- chmod +x .travis/main.sh
+	- chmod +x mvnw
+	- ./.travis/main.sh
+
+notifications:
+	email:
+		on_success: always # default: change
+		on_failure: always # default: always
