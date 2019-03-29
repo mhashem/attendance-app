@@ -1,0 +1,16 @@
+sudo: required
+
+env:
+	- MAVEN_VERSION=3.3.9
+
+language: java
+jdk:
+	- oraclejdk8
+
+script:
+	- mvn clean verify install;
+
+notifications:
+	email:
+		on_success: always # default: change
+		on_failure: always # default: always
