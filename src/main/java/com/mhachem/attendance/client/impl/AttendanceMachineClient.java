@@ -18,6 +18,7 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mhachem.attendance.client.IAttendanceMachineClient;
 import com.mhachem.attendance.config.AttendanceConfig;
 import com.mhachem.attendance.model.AttendanceDay;
+import com.mhachem.attendance.model.v2.EmployeeAttendance;
 import com.mhachem.attendance.utils.Constants;
 import com.mhachem.attendance.utils.Helper;
 import org.slf4j.Logger;
@@ -44,10 +45,9 @@ public class AttendanceMachineClient implements IAttendanceMachineClient {
 	@Override
 	public List<AttendanceDay> parseAttendanceDays(int employeeId, int month, int year) throws UnirestException, IOException {
 
-		LocalDate seedDate = LocalDate.now().withMonth(month).withYear(year);
+		LocalDate seedDate = LocalDate.of(year, month, 1);
 
-		HttpResponse<InputStream> httpResponse = null;
-		httpResponse = Unirest.get(attendanceConfig.getMachine().getAddress())
+		HttpResponse<InputStream> httpResponse = Unirest.get(attendanceConfig.getMachine().getAddress())
 			.queryString("redirect", "report.htm")
 			.queryString("failure", "fail.htm")
 			.queryString("type", "attend_report")
@@ -73,6 +73,26 @@ public class AttendanceMachineClient implements IAttendanceMachineClient {
 			logger.warn("Failed to get file for employee id {} - month {}", employeeId, month);
 			return ImmutableList.of();
 		}
+	}
+
+	@Override
+	public List<EmployeeAttendance> getEmployeeAttendance(int employeeId) throws UnirestException, IOException {
+		return getEmployeeAttendance(employeeId, LocalDate.now().getMonthValue());
+	}
+
+	@Override
+	public List<EmployeeAttendance> getEmployeeAttendance(int employeeId, int month)
+		throws UnirestException, IOException {
+		return getEmployeeAttendance(employeeId, month, LocalDate.now().getYear());
+	}
+
+	@Override
+	public List<EmployeeAttendance> getEmployeeAttendance(int employeeId, int month, int year)
+		throws UnirestException, IOException {
+
+
+
+		return null;
 	}
 
 	private List<AttendanceDay> parseStream(InputStream inputStream) throws IOException {
